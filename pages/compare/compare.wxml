@@ -1,50 +1,46 @@
 <view class="page-container">
   <!-- 表头固定在顶部 -->
-  <view class="table">
-    <view class="table-header">
-      <view class="cell delete-cell"></view>
-      <view class="cell index-cell"></view>
-      <view class="cell sortable name-cell" bindtap="sortItems" data-field="name">
-        商品名
-        <text class="sort-icon" wx:if="{{sortField === 'name'}}">
-          {{sortOrder === 'asc' ? '↑' : '↓'}}
-        </text>
-      </view>
-      <view class="cell sortable price-cell" bindtap="sortItems" data-field="price">
-        总价
-        <text class="sort-icon" wx:if="{{sortField === 'price'}}">
-          {{sortOrder === 'asc' ? '↑' : '↓'}}
-        </text>
-      </view>
-      <view class="cell sortable spec-cell" bindtap="sortItems" data-field="spec">
-        规格
-        <text class="sort-icon" wx:if="{{sortField === 'spec'}}">
-          {{sortOrder === 'asc' ? '↑' : '↓'}}
-        </text>
-      </view>
-      <view class="cell sortable quantity-cell" bindtap="sortItems" data-field="quantity">
-        数量
-        <text class="sort-icon" wx:if="{{sortField === 'quantity'}}">
-          {{sortOrder === 'asc' ? '↑' : '↓'}}
-        </text>
-      </view>
-      <view class="cell sortable unitprice-cell" bindtap="sortItems" data-field="unitPrice">
-        单价
-        <text class="sort-icon" wx:if="{{sortField === 'unitPrice'}}">
-          {{sortOrder === 'asc' ? '↑' : '↓'}}
-        </text>
-      </view>
+  <view class="item-card table-header">
+    <view class="cell delete-cell-header"></view>
+    <view class="cell sortable name-cell-header" bindtap="sortItems" data-field="name">
+      商品名
+      <text class="sort-icon" wx:if="{{sortField === 'name'}}">
+        {{sortOrder === 'asc' ? '↑' : '↓'}}
+      </text>
+    </view>
+    <view class="cell sortable price-cell-header" bindtap="sortItems" data-field="price">
+      总价
+      <text class="sort-icon" wx:if="{{sortField === 'price'}}">
+        {{sortOrder === 'asc' ? '↑' : '↓'}}
+      </text>
+    </view>
+    <view class="cell sortable spec-cell-header" bindtap="sortItems" data-field="spec">
+      规格
+      <text class="sort-icon" wx:if="{{sortField === 'spec'}}">
+        {{sortOrder === 'asc' ? '↑' : '↓'}}
+      </text>
+    </view>
+    <view class="cell sortable quantity-cell-header" bindtap="sortItems" data-field="quantity">
+      数量
+      <text class="sort-icon" wx:if="{{sortField === 'quantity'}}">
+        {{sortOrder === 'asc' ? '↑' : '↓'}}
+      </text>
+    </view>
+    <view class="cell sortable unitprice-cell-header" bindtap="sortItems" data-field="unitPrice">
+      单价
+      <text class="sort-icon" wx:if="{{sortField === 'unitPrice'}}">
+        {{sortOrder === 'asc' ? '↑' : '↓'}}
+      </text>
     </view>
   </view>
   <!-- 内容可滚动 -->
   <scroll-view class="table-container" scroll-y>
     <view class="table">
       <block wx:for="{{items}}" wx:key="index">
-        <view class="table-row {{item.error ? 'error' : ''}} {{item.isLowest ? 'lowest' : ''}} {{item.isHighest ? 'highest' : ''}}">
+        <view class="item-card {{item.error ? 'error' : ''}} {{item.isLowest ? 'lowest' : ''}} {{item.isHighest ? 'highest' : ''}}">
           <view class="cell delete-cell">
-            <view class="delete-btn" bindtap="deleteItem" data-index="{{index}}">×</view>
+            <image class="delete-btn" src="/images/trashbin.png" mode="aspectFit" bindtap="deleteItem" data-index="{{index}}" />
           </view>
-          <view class="cell index-cell">{{index + 1}}</view>
           <view class="cell name-cell">
             <input class="input {{!item.nameModified ? 'placeholder-text' : ''}}" 
                    value="{{item.name}}" 

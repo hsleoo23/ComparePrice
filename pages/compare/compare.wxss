@@ -54,7 +54,10 @@
   padding: 20rpx 10rpx;
   display: flex;
   align-items: center;
-  /* border-right: 1rpx solid #ddd; */
+  justify-content: center;
+  box-sizing: border-box;
+  border: none;
+  background: none;
 }
 
 .cell:last-child {
@@ -205,66 +208,135 @@
   padding: 20rpx 10rpx;
   text-align: center;
 }
+.delete-cell-header {
+  width: 10%;
+  min-width: 32 rpx;
+  max-width: 32 rpx;
+  justify-content: center;
+  flex: none;
+}
 
-.delete-cell {
-  width: 1%;
+.name-cell-header {
+  width: 28%;
+  min-width: 12 rpx;
+  max-width: 15 rpx;
+  justify-content: center;
+  flex: none;
+}
+.price-cell-header {
+  width: 17%;
+  min-width: 12 rpx;
+  max-width: 15 rpx;
+  justify-content: center;
+  flex: none;
+}
+.spec-cell-header {
+  width: 15%;
+  min-width: 12 rpx;
+  max-width: 15 rpx;
+  justify-content: center;
+  flex: none;
+}
+.quantity-cell-header {
+  width: 15%;
+  min-width: 12 rpx;
+  max-width: 15 rpx;
+  justify-content: center;
+  flex: none;
+}
+.unitprice-cell-header {
+  width: 15%;
   min-width: 12 rpx;
   max-width: 15 rpx;
   justify-content: center;
   flex: none;
 }
 
-.index-cell {
-  width: 4%;
-  min-width: 18rpx;
-  max-width: 20 rpx;
+.delete-cell {
+  width: 10%;
+  min-width: 32 rpx;
+  max-width: 32 rpx;
   justify-content: center;
-  color: #666;
-  font-size: 28rpx;
   flex: none;
 }
+
 
 .name-cell {
-  width: 20%;
+  width: 28%;
   min-width: 100rpx;
   flex: none;
+  justify-content: center;
+  text-align: center
+  
 }
 
-.price-cell {
+.price-cell{
+  justify-content: right;
+  width: 17%;
+  text-align: right
+}
+.spec-cell{
+  justify-content: right;
   width: 15%;
-  min-width: 60rpx;
-  flex: none;
+  text-align: right
 }
-
-.spec-cell {
-  width: 13%;
-  min-width: 60rpx;
-  flex: none;
-}
-
-.quantity-cell {
-  width: 10%;
-  min-width: 40rpx;
-  /* justify-content: center; */
-  flex: none;
+.quantity-cell{
+  justify-content: right;
+  width: 15%;
+  text-align: right
 }
 
 .unitprice-cell {
+  justify-content: right;
   width: 15%;
-  min-width: 60rpx;
-  flex: none;
+  text-align: right
 }
 
 .delete-btn {
   width: 32rpx;
   height: 32rpx;
-  line-height: 28rpx;
-  text-align: center;
-  color: #999;
-  font-size: 24rpx;
   cursor: pointer;
+  display: block;
 }
 
 .delete-btn:active {
   color: #666;
+}
+
+.item-card {
+  background: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 24rpx rgba(0,0,0,0.08);
+  margin-bottom: 24rpx;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+  overflow: hidden;
+}
+
+.item-card.error { background: #fff3e0; }
+.item-card.lowest { background: #e8f5e9; }
+.item-card.highest { background: #ffebee; }
+
+/* 保证item-card内的.cell和表头cell样式一致 */
+.item-card .cell {
+  padding: 20rpx 10rpx;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  border: none;
+  background: none;
+}
+
+.item-card,
+.table-header.item-card {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
 }
