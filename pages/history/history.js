@@ -82,5 +82,10 @@ Page({
       title: '删除成功',
       icon: 'success'
     });
+  },
+  // 直接删除（无弹窗）
+  deleteRecordDirect: function(e) {
+    const id = e.currentTarget.dataset.id;
+    this.deleteRecord(id);
   }
 });

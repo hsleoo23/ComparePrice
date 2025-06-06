@@ -13,9 +13,11 @@
   border-radius: 12rpx;
   background-color: #ffffff;
   box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  position: relative;
 }
 .record-header {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20rpx;
@@ -24,10 +26,13 @@
   font-size: 32rpx;
   font-weight: bold;
   color: #333;
+  flex-shrink: 0;
 }
 .record-date {
   font-size: 24rpx;
   color: #999;
+  margin-left: 20rpx;
+  flex-shrink: 0;
 }
 .record-preview {
   background-color: #f8f8f8;
@@ -52,10 +57,14 @@
   font-weight: bold;
 }
 .record-footer {
-  display: flex;
-  justify-content: flex-end;
+  position: absolute;
+  right: 30rpx;
+  bottom: 10rpx;
   font-size: 24rpx;
   color: #999;
+  display: flex;
+  align-items: center;
+  margin-top: 0;
 }
 .item-count {
   font-size: 24rpx;
@@ -84,4 +93,17 @@
   height: 200rpx;
   margin-bottom: 20rpx;
   opacity: 0.5;
+}
+.delete-x {
+  position: absolute;
+  left: 30rpx;
+  bottom: 10rpx;
+  width: 36rpx;
+  height: 36rpx;
+  z-index: 10;
+  cursor: pointer;
+}
+.delete-x:active {
+  color: #888;
+  background: none;
 }

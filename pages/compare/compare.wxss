@@ -14,6 +14,7 @@
 .table {
   width: 100%;
   background-color: #fff;
+  /* border: 1rpx solid #ddd; */
 }
 
 .table-header {
@@ -24,12 +25,17 @@
   display: flex;
   background-color: #f0f0f0;
   font-weight: bold;
+  /* border-bottom: 1rpx solid #ddd; */
 }
 
 .table-row {
   display: flex;
-  border-bottom: 1rpx solid #eee;
-  padding: 20rpx 0;
+  /* border-bottom: 1rpx solid #ddd; */
+  padding: 0;
+}
+
+.table-row:last-child {
+  border-bottom: none;
 }
 
 .table-row.error {
@@ -45,10 +51,14 @@
 }
 
 .cell {
-  flex: 1;
-  padding: 10rpx;
+  padding: 20rpx 10rpx;
   display: flex;
   align-items: center;
+  /* border-right: 1rpx solid #ddd; */
+}
+
+.cell:last-child {
+  /* border-right: none; */
 }
 
 .cell input {
@@ -196,30 +206,65 @@
   text-align: center;
 }
 
+.delete-cell {
+  width: 1%;
+  min-width: 12 rpx;
+  max-width: 15 rpx;
+  justify-content: center;
+  flex: none;
+}
+
 .index-cell {
-  flex: 0.5;
+  width: 4%;
+  min-width: 18rpx;
+  max-width: 20 rpx;
   justify-content: center;
   color: #666;
   font-size: 28rpx;
+  flex: none;
 }
 
-.delete-cell {
-  flex: 0.5;
-  justify-content: center;
+.name-cell {
+  width: 20%;
+  min-width: 100rpx;
+  flex: none;
+}
+
+.price-cell {
+  width: 15%;
+  min-width: 60rpx;
+  flex: none;
+}
+
+.spec-cell {
+  width: 13%;
+  min-width: 60rpx;
+  flex: none;
+}
+
+.quantity-cell {
+  width: 10%;
+  min-width: 40rpx;
+  /* justify-content: center; */
+  flex: none;
+}
+
+.unitprice-cell {
+  width: 15%;
+  min-width: 60rpx;
+  flex: none;
 }
 
 .delete-btn {
-  width: 40rpx;
-  height: 40rpx;
-  line-height: 36rpx;
+  width: 32rpx;
+  height: 32rpx;
+  line-height: 28rpx;
   text-align: center;
-  border-radius: 50%;
-  background-color: #ff4d4f;
-  color: white;
-  font-size: 32rpx;
+  color: #999;
+  font-size: 24rpx;
   cursor: pointer;
 }
 
 .delete-btn:active {
-  opacity: 0.8;
+  color: #666;
 }

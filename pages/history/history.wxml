@@ -5,6 +5,7 @@
             bindtap="loadRecord" 
             bindlongpress="showDeleteConfirm"
             data-id="{{item.id}}">
+        <image class="delete-x" src="/images/trashbin.png" mode="aspectFit" catchtap="deleteRecordDirect" data-id="{{item.id}}" />
         <view class="record-header">
           <view class="record-title">{{item.title}}</view>
           <view class="record-date">{{item.formattedDate}}</view>

@@ -360,18 +360,23 @@ Page({
   // 删除单条商品
   deleteItem: function(e) {
     const index = e.currentTarget.dataset.index;
-    wx.showModal({
-      title: '确认删除',
-      content: '确定要删除这条商品记录吗？',
-      success: (res) => {
-        if (res.confirm) {
-          let items = this.data.items;
+    let items = this.data.items;
           items.splice(index, 1);
           this.setData({ items }, () => {
             this.updatePriceStatus();
           });
-        }
-      }
-    });
+    // wx.showModal({
+    //   title: '确认删除',
+    //   content: '确定要删除这条商品记录吗？',
+    //   success: (res) => {
+    //     if (res.confirm) {
+    //       let items = this.data.items;
+    //       items.splice(index, 1);
+    //       this.setData({ items }, () => {
+    //         this.updatePriceStatus();
+    //       });
+    //     }
+    //   }
+    // });
   }
 });
