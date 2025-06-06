@@ -28,19 +28,20 @@
 
 .table-row {
   display: flex;
-  border-top: 1rpx solid #cccccc;
+  border-bottom: 1rpx solid #eee;
+  padding: 20rpx 0;
 }
 
 .table-row.error {
-  background-color: #ffecec;
+  background-color: #fff3e0;
 }
 
 .table-row.lowest {
-  background-color: #e6f7ff;
+  background-color: #e8f5e9;
 }
 
 .table-row.highest {
-  background-color: #ffecec;
+  background-color: #ffebee;
 }
 
 .cell {
@@ -171,4 +172,26 @@
 
 .input:not(.placeholder-text) {
   color: #333;
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  padding-right: 30rpx;
+}
+
+.sort-icon {
+  position: absolute;
+  right: 10rpx;
+  color: #07c160;
+  font-size: 24rpx;
+}
+
+.table-header .cell {
+  font-weight: bold;
+  color: #333;
+  background-color: #f7f7f7;
+  padding: 20rpx 10rpx;
+  text-align: center;
 }

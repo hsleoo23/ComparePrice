@@ -1,13 +1,27 @@
 <view class="container">
   <view class="record-list">
     <block wx:for="{{records}}" wx:key="id">
-      <view class="record-item" bindtap="loadRecord" data-id="{{item.id}}">
-        <view class="record-title">{{item.title}}</view>
-        <view class="record-date">{{item.createdAt}}</view>
+      <view class="record-item" 
+            bindtap="loadRecord" 
+            bindlongpress="showDeleteConfirm"
+            data-id="{{item.id}}">
+        <view class="record-header">
+          <view class="record-title">{{item.title}}</view>
+          <view class="record-date">{{item.formattedDate}}</view>
+        </view>
+        <view class="record-preview">
+          <view class="preview-item" wx:for="{{item.items}}" wx:for-item="product" wx:key="name">
+            <text class="product-name">{{product.name}}</text>
+            <text class="product-price">单价 {{product.unitPrice}}</text>
+          </view>
+        </view>
+        <view class="record-footer">
+          <text class="item-count">共{{item.items.length}}个商品</text>
+        </view>
       </view>
     </block>
   </view>
   <view wx:if="{{records.length === 0}}" class="no-records">
-    暂无比价记录
+    <text class="empty-text">暂无比价记录</text>
   </view>
 </view>

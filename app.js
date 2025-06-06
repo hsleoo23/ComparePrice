@@ -1,8 +1,8 @@
 App({
-  onLaunch: function () {
-    // 初始化小程序时的逻辑
-  },
   globalData: {
-    // 全局数据
+    loadedRecord: null
+  },
+  onLaunch() {
+    // 小程序启动时执行的逻辑
   }
 })

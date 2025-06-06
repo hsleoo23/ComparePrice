@@ -2,11 +2,48 @@ Page({
   data: {
     items: [],
     isManaging: false,
-    selectedItems: []
+    selectedItems: [],
+    sortField: '', // 当前排序字段
+    sortOrder: 'asc' // 排序方向：asc 或 desc
   },
   onLoad: function () {
     // 添加两条默认商品记录
     this.addDefaultItems();
+  },
+  onShow: function () {
+    // 检查是否有需要加载的记录
+    const app = getApp();
+    if (app.globalData && app.globalData.loadedRecord) {
+      // 加载记录数据
+      const record = app.globalData.loadedRecord;
+      const items = record.items.map(item => {
+        // 重新计算单价
+        const price = parseFloat(item.price);
+        const spec = parseFloat(item.spec);
+        const quantity = parseInt(item.quantity) || 1;
+        const unitPriceValue = price / (spec * quantity);
+        
+        return {
+          ...item,
+          unitPrice: unitPriceValue.toFixed(2),
+          unitPriceValue: unitPriceValue,
+          nameModified: true,
+          priceModified: true,
+          specModified: true,
+          quantityModified: true,
+          isLowest: false,
+          isHighest: false
+        };
+      });
+
+      this.setData({ items }, () => {
+        // 在设置数据后立即更新价格状态
+        this.updatePriceStatus();
+      });
+      
+      // 清除全局数据中的记录
+      app.globalData.loadedRecord = null;
+    }
   },
   // 添加默认商品记录
   addDefaultItems: function() {
@@ -100,7 +137,6 @@ Page({
     // 如果更新的是价格、规格或数量，则重新计算单价
     if (['price', 'spec', 'quantity'].includes(field)) {
       this.calculateUnitPrice(index);
-      this.updatePriceStatus();
     }
     this.setData({ items });
   },
@@ -122,16 +158,21 @@ Page({
       if (isNaN(price) || isNaN(spec) || isNaN(quantity) || spec === 0 || quantity === 0) {
         item.error = true;
         item.unitPrice = '';
+        item.unitPriceValue = undefined;
         return;
       }
 
       const unitPriceValue = price / (spec * quantity);
-      item.unitPrice = unitPriceValue.toFixed(2); // 移除单位显示，只保留数字
+      item.unitPrice = unitPriceValue.toFixed(2);
+      item.unitPriceValue = unitPriceValue; // 存储用于排序的数值
     } else {
       item.unitPrice = '';
+      item.unitPriceValue = undefined;
     }
     
-    this.setData({ items });
+    this.setData({ items }, () => {
+      this.updatePriceStatus();
+    });
   },
   // 清空所有商品项
   clearItems: function () {
@@ -212,21 +253,21 @@ Page({
       placeholderText: '请输入比价记录标题',
       success: (res) => {
         if (res.confirm && res.content) {
-          let record = {
-            id: Date.now().toString(),
+    let record = {
+      id: Date.now().toString(),
             title: res.content,
-            createdAt: new Date().toISOString(),
-            items: validItems
-          };
-          let records = wx.getStorageSync('records') || [];
-          records.push(record);
-          wx.setStorageSync('records', records);
-          wx.showToast({
-            title: '保存成功',
-            icon: 'success'
-          });
+      createdAt: new Date().toISOString(),
+      items: validItems
+    };
+    let records = wx.getStorageSync('records') || [];
+    records.push(record);
+    wx.setStorageSync('records', records);
+    wx.showToast({
+      title: '保存成功',
+      icon: 'success'
+    });
           // 清空当前数据，重新添加默认商品
-          this.setData({
+    this.setData({
             items: []
           }, () => {
             this.addDefaultItems();
@@ -235,8 +276,8 @@ Page({
           wx.showToast({
             title: '请输入标题',
             icon: 'none'
-          });
-        }
+    });
+  }
       }
     });
   },
@@ -259,5 +300,62 @@ Page({
       
       this.setData({ items });
     }
+  },
+  // 添加排序方法
+  sortItems: function(e) {
+    const field = e.currentTarget.dataset.field;
+    let { items, sortField, sortOrder } = this.data;
+    
+    // 如果点击的是当前排序字段，则切换排序方向
+    if (field === sortField) {
+      sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      // 如果是新的排序字段，默认升序
+      sortField = field;
+      sortOrder = 'asc';
+    }
+
+    // 根据字段类型进行排序
+    items.sort((a, b) => {
+      let valueA, valueB;
+      
+      switch(field) {
+        case 'name':
+          valueA = a.name || '';
+          valueB = b.name || '';
+          break;
+        case 'price':
+          valueA = parseFloat(a.price) || 0;
+          valueB = parseFloat(b.price) || 0;
+          break;
+        case 'spec':
+          valueA = parseFloat(a.spec) || 0;
+          valueB = parseFloat(b.spec) || 0;
+          break;
+        case 'quantity':
+          valueA = parseInt(a.quantity) || 0;
+          valueB = parseInt(b.quantity) || 0;
+          break;
+        case 'unitPrice':
+          valueA = a.unitPriceValue || 0;
+          valueB = b.unitPriceValue || 0;
+          break;
+        default:
+          return 0;
+      }
+
+      // 根据排序方向返回比较结果
+      if (sortOrder === 'asc') {
+        return valueA > valueB ? 1 : -1;
+      } else {
+        return valueA < valueB ? 1 : -1;
+      }
+    });
+
+    this.setData({ 
+      items,
+      sortField,
+      sortOrder
+    });
   },
 });
