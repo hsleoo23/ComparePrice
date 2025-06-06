@@ -1,0 +1,13 @@
+<view class="container">
+  <view class="record-list">
+    <block wx:for="{{records}}" wx:key="id">
+      <view class="record-item" bindtap="loadRecord" data-id="{{item.id}}">
+        <view class="record-title">{{item.title}}</view>
+        <view class="record-date">{{item.createdAt}}</view>
+      </view>
+    </block>
+  </view>
+  <view wx:if="{{records.length === 0}}" class="no-records">
+    暂无比价记录
+  </view>
+</view>

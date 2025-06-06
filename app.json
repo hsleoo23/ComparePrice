@@ -1,0 +1,27 @@
+{
+  "pages": [
+    "pages/compare/compare",
+    "pages/history/history"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "商品比价",
+    "navigationBarTextStyle": "black"
+  },
+  "renderer": "webview",
+  "tabBar": {
+    "list": [
+      {
+        "pagePath": "pages/compare/compare",
+        "text": "比一比"
+      },
+      {
+        "pagePath": "pages/history/history",
+        "text": "比价历史"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

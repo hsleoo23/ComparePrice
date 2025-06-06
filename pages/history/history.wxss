@@ -1,0 +1,28 @@
+.container {
+  padding: 20rpx;
+}
+.record-list {
+  display: flex;
+  flex-direction: column;
+}
+.record-item {
+  padding: 20rpx;
+  border: 1rpx solid #cccccc;
+  margin-bottom: 20rpx;
+  border-radius: 5rpx;
+  background-color: #ffffff;
+}
+.record-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+.record-date {
+  font-size: 14px;
+  color: #888888;
+}
+.no-records {
+  text-align: center;
+  color: #888888;
+  padding: 40rpx 0;
+}

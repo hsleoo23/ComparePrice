@@ -1,0 +1,174 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f7f7f7;
+}
+
+.table-container {
+  flex: 1;
+  overflow: hidden;
+  padding-bottom: 20rpx;
+}
+
+.table {
+  width: 100%;
+  background-color: #fff;
+}
+
+.table-header {
+  position: sticky;
+  top: 0;
+  background-color: #f7f7f7;
+  z-index: 1;
+  display: flex;
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.table-row {
+  display: flex;
+  border-top: 1rpx solid #cccccc;
+}
+
+.table-row.error {
+  background-color: #ffecec;
+}
+
+.table-row.lowest {
+  background-color: #e6f7ff;
+}
+
+.table-row.highest {
+  background-color: #ffecec;
+}
+
+.cell {
+  flex: 1;
+  padding: 10rpx;
+  display: flex;
+  align-items: center;
+}
+
+.cell input {
+  width: 100%;
+  border: 1rpx solid transparent;
+  padding: 5rpx;
+}
+
+.bottom-buttons {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 20rpx;
+  padding: 20rpx;
+  flex-wrap: wrap;
+}
+
+.action-buttons button {
+  flex: 1;
+  min-width: 200rpx;
+  margin: 0;
+  font-size: 28rpx;
+  padding: 16rpx 0;
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 8rpx;
+}
+
+.action-buttons button:active {
+  background-color: #f0f0f0;
+}
+
+.manage-buttons {
+  display: flex;
+  gap: 20rpx;
+  padding: 0 20rpx 20rpx;
+}
+
+.manage-buttons button {
+  flex: 1;
+  margin: 0;
+  font-size: 28rpx;
+  padding: 16rpx 0;
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 8rpx;
+}
+
+.manage-buttons button:active {
+  background-color: #f0f0f0;
+}
+
+.save-button {
+  padding: 20rpx;
+  border-top: 1px solid #eee;
+}
+
+.save-button button {
+  width: 100%;
+  margin: 0;
+  background-color: #07c160;
+  color: #fff;
+  border: none;
+  border-radius: 8rpx;
+  padding: 20rpx 0;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.save-button button:active {
+  opacity: 0.8;
+}
+
+/* 确保内容不被底部按钮遮挡 */
+.table-container {
+  padding-bottom: calc(120rpx + 180rpx); /* 根据底部按钮的实际高度调整 */
+}
+
+/* 当有管理按钮时，增加底部padding */
+.manage-buttons + .save-button {
+  padding-bottom: calc(120rpx + 180rpx + 100rpx); /* 额外增加管理按钮的高度 */
+}
+
+.title-input {
+  margin-bottom: 20rpx;
+}
+
+.title-input input {
+  border: 1rpx solid #cccccc;
+  padding: 10rpx;
+  border-radius: 5rpx;
+}
+
+.input {
+  width: 100%;
+  height: 100%;
+  padding: 4px 8px;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.placeholder-text {
+  color: #999;
+}
+
+.input:focus {
+  border-color: #07c160;
+  outline: none;
+}
+
+.input:not(.placeholder-text) {
+  color: #333;
+}
