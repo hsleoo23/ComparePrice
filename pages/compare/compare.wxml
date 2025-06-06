@@ -3,6 +3,7 @@
   <scroll-view class="table-container" scroll-y>
   <view class="table">
     <view class="table-header">
+      <view class="cell index-cell">序号</view>
       <view class="cell sortable" bindtap="sortItems" data-field="name">
         商品名
         <text class="sort-icon" wx:if="{{sortField === 'name'}}">
@@ -33,9 +34,11 @@
           {{sortOrder === 'asc' ? '↑' : '↓'}}
         </text>
       </view>
+      <view class="cell delete-cell">操作</view>
     </view>
     <block wx:for="{{items}}" wx:key="index">
         <view class="table-row {{item.error ? 'error' : ''}} {{item.isLowest ? 'lowest' : ''}} {{item.isHighest ? 'highest' : ''}}">
+          <view class="cell index-cell">{{index + 1}}</view>
           <view class="cell">
             <input class="input {{!item.nameModified ? 'placeholder-text' : ''}}" 
                    value="{{item.name}}" 
@@ -69,8 +72,11 @@
                    data-field="quantity" 
                    bindinput="updateItem" />
           </view>
-        <view class="cell">{{item.unitPrice}}</view>
-      </view>
+          <view class="cell">{{item.unitPrice}}</view>
+          <view class="cell delete-cell">
+            <view class="delete-btn" bindtap="deleteItem" data-index="{{index}}">×</view>
+          </view>
+        </view>
     </block>
   </view>
   </scroll-view>
@@ -80,12 +86,9 @@
     <view class="action-buttons">
     <button bindtap="addItem">添加商品</button>
     <button bindtap="clearItems">清空</button>
-    <button bindtap="toggleManage">{{isManaging ? '完成' : '管理'}}</button>
+
   </view>
-    <view class="manage-buttons" wx:if="{{isManaging}}">
-    <button bindtap="selectAll">全选</button>
-    <button bindtap="deleteSelectedItems">删除选中</button>
-  </view>
+
   <view class="save-button">
     <button bindtap="saveRecord">保存比价记录</button>
     </view>

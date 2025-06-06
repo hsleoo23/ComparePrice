@@ -1,7 +1,6 @@
 Page({
   data: {
     items: [],
-    isManaging: false,
     selectedItems: [],
     sortField: '', // 当前排序字段
     sortOrder: 'asc' // 排序方向：asc 或 desc
@@ -192,45 +191,45 @@ Page({
     });
   },
   // 切换管理模式
-  toggleManage: function () {
-    this.setData({
-      isManaging: !this.data.isManaging,
-      selectedItems: []
-    });
-  },
+  // toggleManage: function () {
+  //   this.setData({
+  //     isManaging: !this.data.isManaging,
+  //     selectedItems: []
+  //   });
+  // },
   // 选择商品项
-  selectItem: function (e) {
-    let index = e.currentTarget.dataset.index;
-    let selectedItems = this.data.selectedItems;
-    let idx = selectedItems.indexOf(index);
-    if (idx > -1) {
-      selectedItems.splice(idx, 1);
-    } else {
-      selectedItems.push(index);
-    }
-    this.setData({ selectedItems });
-  },
-  // 全选/全不选
-  selectAll: function () {
-    let selectedItems = this.data.selectedItems;
-    if (selectedItems.length === this.data.items.length) {
-      selectedItems = [];
-    } else {
-      selectedItems = this.data.items.map((_, index) => index);
-    }
-    this.setData({ selectedItems });
-  },
+  // selectItem: function (e) {
+  //   let index = e.currentTarget.dataset.index;
+  //   let selectedItems = this.data.selectedItems;
+  //   let idx = selectedItems.indexOf(index);
+  //   if (idx > -1) {
+  //     selectedItems.splice(idx, 1);
+  //   } else {
+  //     selectedItems.push(index);
+  //   }
+  //   this.setData({ selectedItems });
+  // },
+  // // 全选/全不选
+  // selectAll: function () {
+  //   let selectedItems = this.data.selectedItems;
+  //   if (selectedItems.length === this.data.items.length) {
+  //     selectedItems = [];
+  //   } else {
+  //     selectedItems = this.data.items.map((_, index) => index);
+  //   }
+  //   this.setData({ selectedItems });
+  // },
   // 删除选中的商品项
-  deleteSelectedItems: function () {
-    let items = this.data.items.filter((_, index) => !this.data.selectedItems.includes(index));
-    this.setData({
-      items,
-      selectedItems: [],
-      isManaging: false
-    }, () => {
-      this.updatePriceStatus();
-    });
-  },
+  // deleteSelectedItems: function () {
+  //   let items = this.data.items.filter((_, index) => !this.data.selectedItems.includes(index));
+  //   this.setData({
+  //     items,
+  //     selectedItems: [],
+  //     isManaging: false
+  //   }, () => {
+  //     this.updatePriceStatus();
+  //   });
+  // },
   // 保存比价记录
   saveRecord: function () {
     let { items } = this.data;
@@ -355,6 +354,24 @@ Page({
       items,
       sortField,
       sortOrder
+    });
+  },
+
+  // 删除单条商品
+  deleteItem: function(e) {
+    const index = e.currentTarget.dataset.index;
+    wx.showModal({
+      title: '确认删除',
+      content: '确定要删除这条商品记录吗？',
+      success: (res) => {
+        if (res.confirm) {
+          let items = this.data.items;
+          items.splice(index, 1);
+          this.setData({ items }, () => {
+            this.updatePriceStatus();
+          });
+        }
+      }
     });
   }
 });

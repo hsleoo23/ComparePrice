@@ -195,3 +195,31 @@
   padding: 20rpx 10rpx;
   text-align: center;
 }
+
+.index-cell {
+  flex: 0.5;
+  justify-content: center;
+  color: #666;
+  font-size: 28rpx;
+}
+
+.delete-cell {
+  flex: 0.5;
+  justify-content: center;
+}
+
+.delete-btn {
+  width: 40rpx;
+  height: 40rpx;
+  line-height: 36rpx;
+  text-align: center;
+  border-radius: 50%;
+  background-color: #ff4d4f;
+  color: white;
+  font-size: 32rpx;
+  cursor: pointer;
+}
+
+.delete-btn:active {
+  opacity: 0.8;
+}
