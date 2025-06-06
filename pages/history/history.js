@@ -12,7 +12,7 @@ Page({
       ...record,
       formattedDate: this.formatDate(record.createdAt),
       // 只显示前3个商品作为预览
-      items: record.items.slice(0, 3)
+      // items: record.items.slice(0, 3)
     }));
     this.setData({ records: records.reverse() }); // 最新的记录显示在前面
   },
@@ -51,6 +51,7 @@ Page({
       getApp().globalData = getApp().globalData || {};
       getApp().globalData.loadedRecord = record;
       
+      console.log('history传过去的record', record);
       // 切换到比一比页面
       wx.switchTab({
         url: '/pages/compare/compare'

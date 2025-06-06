@@ -16,29 +16,28 @@ Page({
     if (app.globalData && app.globalData.loadedRecord) {
       // 加载记录数据
       const record = app.globalData.loadedRecord;
-      const items = record.items.map(item => {
-        // 重新计算单价
-        const price = parseFloat(item.price);
-        const spec = parseFloat(item.spec);
-        const quantity = parseInt(item.quantity) || 1;
-        const unitPriceValue = price / (spec * quantity);
-        
-        return {
-          ...item,
-          unitPrice: unitPriceValue.toFixed(2),
-          unitPriceValue: unitPriceValue,
-          nameModified: true,
-          priceModified: true,
-          specModified: true,
-          quantityModified: true,
-          isLowest: false,
-          isHighest: false
-        };
-      });
+      
+      // 将历史记录中的商品数据填入表格
+      const items = record.items.map(item => ({
+        name: item.name,
+        price: item.price,
+        spec: item.spec,
+        quantity: item.quantity,
+        unitPrice: '', // 初始化为空，等待计算
+        nameModified: true,
+        priceModified: true,
+        specModified: true,
+        quantityModified: true,
+        error: false,
+        isLowest: false,
+        isHighest: false
+      }));
 
       this.setData({ items }, () => {
-        // 在设置数据后立即更新价格状态
-        this.updatePriceStatus();
+        // 为每个商品计算单价
+        items.forEach((_, index) => {
+          this.calculateUnitPrice(index);
+        });
       });
       
       // 清除全局数据中的记录
@@ -253,21 +252,21 @@ Page({
       placeholderText: '请输入比价记录标题',
       success: (res) => {
         if (res.confirm && res.content) {
-    let record = {
-      id: Date.now().toString(),
+          let record = {
+            id: Date.now().toString(),
             title: res.content,
-      createdAt: new Date().toISOString(),
-      items: validItems
-    };
-    let records = wx.getStorageSync('records') || [];
-    records.push(record);
-    wx.setStorageSync('records', records);
-    wx.showToast({
-      title: '保存成功',
-      icon: 'success'
-    });
+            createdAt: new Date().toISOString(),
+            items: validItems
+          };
+          let records = wx.getStorageSync('records') || [];
+          records.push(record);
+          wx.setStorageSync('records', records);
+          wx.showToast({
+            title: '保存成功',
+            icon: 'success'
+          });
           // 清空当前数据，重新添加默认商品
-    this.setData({
+          this.setData({
             items: []
           }, () => {
             this.addDefaultItems();
@@ -276,8 +275,8 @@ Page({
           wx.showToast({
             title: '请输入标题',
             icon: 'none'
-    });
-  }
+          });
+        }
       }
     });
   },
@@ -357,5 +356,5 @@ Page({
       sortField,
       sortOrder
     });
-  },
+  }
 });
