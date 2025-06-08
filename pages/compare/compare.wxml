@@ -1,6 +1,6 @@
 <view class="page-container">
   <!-- 表头固定在顶部 -->
-  <view class="item-card table-header">
+  <view class="item-card-header table-header">
     <view class="cell delete-cell-header"></view>
     <view class="cell sortable name-cell-header" bindtap="sortItems" data-field="name">
       商品名
@@ -38,6 +38,7 @@
     <view class="table">
       <block wx:for="{{items}}" wx:key="index">
         <view class="item-card {{item.error ? 'error' : ''}} {{item.isLowest ? 'lowest' : ''}} {{item.isHighest ? 'highest' : ''}}">
+       <view class="item-row">
           <view class="cell delete-cell">
             <image class="delete-btn" src="/images/trashbin.png" mode="aspectFit" bindtap="deleteItem" data-index="{{index}}" />
           </view>
@@ -75,6 +76,11 @@
                    bindinput="updateItem" />
           </view>
           <view class="cell unitprice-cell">{{item.unitPrice}}</view>
+        </view>
+        <view class="tag-row">
+          <view wx:if="{{item.isLowest}}" class="tag tag-abs lowest-tag">🌟单价最优</view>
+          <view wx:if="{{item.isHighest}}" class="tag tag-abs highest-tag">❗最高单价</view>
+        </view>
         </view>
       </block>
     </view>

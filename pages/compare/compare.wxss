@@ -44,10 +44,38 @@
 
 .table-row.lowest {
   background-color: #e8f5e9;
+  position: relative;
+  padding-bottom: 60rpx;  /* 为标识留出空间 */
+}
+
+.table-row.lowest::after {
+  content: "🌟单价最优";
+  position: absolute;
+  right: 20rpx;
+  bottom: 10rpx;  /* 改为底部定位 */
+  font-size: 24rpx;
+  color: #4caf50;
+  background-color: rgba(76, 175, 80, 0.1);
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
 }
 
 .table-row.highest {
   background-color: #ffebee;
+  position: relative;
+  padding-bottom: 60rpx;  /* 为标识留出空间 */
+}
+
+.table-row.highest::after {
+  content: "❗最高单价";
+  position: absolute;
+  right: 20rpx;
+  bottom: 10rpx;  /* 改为底部定位 */
+  font-size: 24rpx;
+  color: #f44336;
+  background-color: rgba(244, 67, 54, 0.1);
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
 }
 
 .cell {
@@ -201,6 +229,13 @@
   font-size: 24rpx;
 }
 
+.item-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+
 .table-header .cell {
   font-weight: bold;
   color: #333;
@@ -287,9 +322,9 @@
 }
 
 .unitprice-cell {
-  justify-content: right;
   width: 15%;
-  text-align: right
+  justify-content: flex-end;
+  text-align: right;
 }
 
 .delete-btn {
@@ -302,6 +337,22 @@
 .delete-btn:active {
   color: #666;
 }
+.item-card-header {
+  background: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 24rpx rgba(0,0,0,0.08);
+  margin-bottom: 24rpx;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+  overflow: hidden;
+}
 
 .item-card {
   background: #fff;
@@ -310,7 +361,7 @@
   margin-bottom: 24rpx;
   position: relative;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: stretch;
   width: 100%;
   margin-left: 0;
@@ -339,4 +390,35 @@
   width: 90%;
   margin-left: auto;
   margin-right: auto;
+}
+.tag-row {
+  display: flex;
+  justify-content: flex-end;  /* ✅ 右对齐 */
+  padding: 0 20rpx 12rpx 20rpx;  /* 左右内边距与卡片保持一致 */
+}
+
+/* 标签样式 */
+.tag {
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 12rpx;
+  display: inline-block;
+}
+
+/* 绝对定位样式（关键） */
+.tag-abs {
+  position: absolute;
+  bottom: 8rpx;
+  right: 16rpx;
+}
+
+.lowest-tag {
+  color: #388e3c;
+  /* background: rgba(76, 175, 80, 0.08); */
+  border-radius: 0 0 12rpx 12rpx;
+}
+.highest-tag {
+  color: #d32f2f;
+  /* background: rgba(244, 67, 54, 0.08); */
+  border-radius: 0 0 12rpx 12rpx;
 }
