@@ -23,8 +23,8 @@
   font-size: 28rpx;
 }
 .chart-area {
-  width: 100%;
-  height: 480rpx;
+  width: 90%;
+  height: 400px;
   margin-top: 24rpx;
   background: #fff;
   border-radius: 16rpx;
@@ -32,6 +32,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: visible;
+}
+ec-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 300px;
+  display: block;
 }
 .empty-tip {
   text-align: center;

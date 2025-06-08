@@ -45,8 +45,10 @@ Page({
       return;
     }
     const priceHistory = wx.getStorageSync('priceHistory') || [];
+    console.log('本地 priceHistory 数据：', priceHistory); // 调试日志
     // 筛选该商品的所有历史价格
     const data = priceHistory.filter(item => item.name === name);
+    console.log('筛选后数据：', data); // 调试日志
     if (data.length === 0) {
       this.setData({ chartData: [] });
       return;
@@ -58,15 +60,20 @@ Page({
     });
   },
   initChart: function() {
+    console.log('用于绘图的数据：', this.data.chartData); // 调试日志
     if (!this.selectComponent('#priceChart')) return;
     this.selectComponent('#priceChart').init((canvas, width, height, dpr) => {
-      const chart = echarts.init(canvas, null, { width, height, devicePixelRatio: dpr });
+      console.log('ECharts init 回调已执行'); // 调试日志
+      const xData = this.data.chartData.map(item => item.time.slice(0, 10)); // 只显示年月日
+      const yData = this.data.chartData.map(item => parseFloat(item.unitPrice));
+      console.log('x轴数据:', xData);
+      console.log('y轴数据:', yData);
       const option = {
         title: { text: '价格历史', left: 'center', top: 10, textStyle: { fontSize: 16 } },
         tooltip: { trigger: 'axis' },
         xAxis: {
           type: 'category',
-          data: this.data.chartData.map(item => item.time.slice(0, 16).replace('T', ' ')),
+          data: xData,
           axisLabel: { rotate: 30 }
         },
         yAxis: {
@@ -76,13 +83,14 @@ Page({
           max: 'dataMax'
         },
         series: [{
-          data: this.data.chartData.map(item => parseFloat(item.unitPrice)),
+          data: yData,
           type: 'line',
           smooth: true,
-          symbol: 'circle',
-          areaStyle: {}
+          symbol: 'circle'
         }]
       };
+      console.log('ECharts option:', option);
+      const chart = echarts.init(canvas, null, { width, height, devicePixelRatio: dpr });
       chart.setOption(option);
       return chart;
     });
