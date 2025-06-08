@@ -20,12 +20,16 @@
 .table-header {
   position: sticky;
   top: 0;
-  background-color: #f7f7f7;
+  /* background-color: #f7f7f7; */
   z-index: 1;
   display: flex;
-  background-color: #f0f0f0;
+  /* background-color: #f0f0f0; */
   font-weight: bold;
-  /* border-bottom: 1rpx solid #ddd; */
+  background-color: #fafafa;
+  border-bottom: 1rpx solid #e0e0e0;
+  font-weight: 600;
+  font-size: 26rpx;
+  color: #444;
 }
 
 .table-row {
@@ -208,6 +212,7 @@
 
 .input:focus {
   border-color: #07c160;
+  background-color: #f9fffa;
   outline: none;
 }
 
@@ -386,7 +391,7 @@
 }
 
 .item-card,
-.table-header.item-card {
+.table-header.item-card-header {
   width: 90%;
   margin-left: auto;
   margin-right: auto;
