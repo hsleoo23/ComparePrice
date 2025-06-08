@@ -94,6 +94,7 @@
     </view>
     <view class="save-button">
       <button bindtap="saveRecord">保存比价记录</button>
+      <button bindtap="savePriceHistory">保存价格信息</button>
     </view>
   </view>
 </view>

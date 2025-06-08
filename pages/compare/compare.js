@@ -378,5 +378,32 @@ Page({
     //     }
     //   }
     // });
+  },
+  savePriceHistory: function () {
+    const items = this.data.items;
+    const now = new Date().toISOString();
+    // 过滤掉默认商品名（如"商品1"、"商品2"等）
+    const validItems = items.filter(item => item.name && !/^商品\d+$/.test(item.name) && item.unitPrice);
+    if (validItems.length === 0) {
+      wx.showToast({
+        title: '没有可保存的商品',
+        icon: 'none'
+      });
+      return;
+    }
+    // 组装要保存的数据
+    const priceHistory = wx.getStorageSync('priceHistory') || [];
+    validItems.forEach(item => {
+      priceHistory.push({
+        name: item.name,
+        unitPrice: item.unitPrice,
+        time: now
+      });
+    });
+    wx.setStorageSync('priceHistory', priceHistory);
+    wx.showToast({
+      title: '价格信息已保存',
+      icon: 'success'
+    });
   }
 });

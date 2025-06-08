@@ -1,0 +1,10 @@
+<view class="page-container">
+  <view class="search-bar">
+    <input class="search-input" placeholder="请输入商品名" value="{{searchName}}" bindinput="onInput" />
+    <button class="search-btn" bindtap="onSearch">搜索</button>
+  </view>
+  <view wx:if="{{chartData.length > 0}}" class="chart-area">
+    <ec-canvas id="priceChart" canvas-id="priceChart" ec="{{ec}}"></ec-canvas>
+  </view>
+  <view wx:else class="empty-tip">暂无该商品的历史价格</view>
+</view> 
