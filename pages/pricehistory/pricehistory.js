@@ -2,95 +2,141 @@ import * as echarts from '../../echarts-for-weixin/ec-canvas/echarts';
 
 Page({
   data: {
-    items: [],
+    productList: [], // 全部产品分组
+    filteredList: [], // 搜索后展示的卡片
     searchName: '',
-    chartData: [],
-    ec: {
-      lazyLoad: true
-    }
+    showBigChart: false,
+    bigChartEc: { lazyLoad: true },
+    bigChartData: null
   },
-  onLoad: function () {
-    // 这里假设从本地缓存读取最近一次比价记录作为演示
-    let records = wx.getStorageSync('records') || [];
-    if (records.length > 0) {
-      // 取最新一条记录
-      let record = records[records.length - 1];
-      // 计算单价最优/最高标识
-      let items = record.items.map(item => ({
-        ...item,
-        isLowest: false,
-        isHighest: false
-      }));
-      // 计算最优/最高
-      const validItems = items.filter(i => i.unitPrice !== undefined && i.unitPrice !== '');
-      if (validItems.length > 0) {
-        const prices = validItems.map(i => parseFloat(i.unitPrice));
-        const minPrice = Math.min(...prices);
-        const maxPrice = Math.max(...prices);
-        items.forEach(i => {
-          if (parseFloat(i.unitPrice) === minPrice) i.isLowest = true;
-          if (parseFloat(i.unitPrice) === maxPrice) i.isHighest = true;
-        });
-      }
-      this.setData({ items });
-    }
-  },
-  onInput: function(e) {
-    this.setData({ searchName: e.detail.value });
-  },
-  onSearch: function() {
-    const name = this.data.searchName.trim();
-    if (!name) {
-      wx.showToast({ title: '请输入商品名', icon: 'none' });
-      return;
-    }
+  onShow: function () {
     const priceHistory = wx.getStorageSync('priceHistory') || [];
-    console.log('本地 priceHistory 数据：', priceHistory); // 调试日志
-    // 筛选该商品的所有历史价格
-    const data = priceHistory.filter(item => item.name === name);
-    console.log('筛选后数据：', data); // 调试日志
-    if (data.length === 0) {
-      this.setData({ chartData: [] });
-      return;
-    }
-    // 按时间排序
-    data.sort((a, b) => new Date(a.time) - new Date(b.time));
-    this.setData({ chartData: data }, () => {
-      this.initChart();
+    // 按商品名分组
+    const group = {};
+    priceHistory.forEach(item => {
+      if (!group[item.name]) group[item.name] = [];
+      group[item.name].push(item);
+    });
+    // 组装每个产品的历史最高价和最低价及时间
+    const productList = Object.keys(group).map((name) => {
+      const dataArr = group[name].sort((a, b) => new Date(a.time) - new Date(b.time));
+      let max = dataArr[0], min = dataArr[0];
+      dataArr.forEach(item => {
+        if (parseFloat(item.unitPrice) > parseFloat(max.unitPrice)) max = item;
+        if (parseFloat(item.unitPrice) < parseFloat(min.unitPrice)) min = item;
+      });
+      return {
+        name,
+        maxPrice: max.unitPrice,
+        maxTime: max.time.slice(0, 16).replace('T', ' '),
+        minPrice: min.unitPrice,
+        minTime: min.time.slice(0, 16).replace('T', ' '),
+        allHistory: dataArr
+      };
+    });
+    this.setData({ productList, filteredList: productList }, () => {
+      this.initAllMiniCharts();
     });
   },
-  initChart: function() {
-    console.log('用于绘图的数据：', this.data.chartData); // 调试日志
-    if (!this.selectComponent('#priceChart')) return;
-    this.selectComponent('#priceChart').init((canvas, width, height, dpr) => {
-      console.log('ECharts init 回调已执行'); // 调试日志
-      const xData = this.data.chartData.map(item => item.time.slice(0, 10)); // 只显示年月日
-      const yData = this.data.chartData.map(item => parseFloat(item.unitPrice));
-      console.log('x轴数据:', xData);
-      console.log('y轴数据:', yData);
+  onInput: function(e) {
+    const value = e.detail.value;
+    this.setData({ searchName: value });
+    if (!value.trim()) {
+      this.setData({ filteredList: this.data.productList });
+    }
+  },
+  onSearch: function() {
+    const keyword = this.data.searchName.trim();
+    if (!keyword) {
+      this.setData({ filteredList: this.data.productList });
+      return;
+    }
+    const filtered = this.data.productList.filter(item => item.name.indexOf(keyword) !== -1);
+    this.setData({ filteredList: filtered });
+  },
+  initAllMiniCharts: function() {
+    this.data.filteredList.forEach((item) => {
+      const chartId = `#chart-${item.name}`;
+      this.initMiniChart(chartId, item.xData, item.yData);
+    });
+  },
+  initMiniChart: function(selector, xData, yData) {
+    const comp = this.selectComponent(selector);
+    if (!comp) return;
+    comp.init((canvas, width, height, dpr) => {
+      const chart = echarts.init(canvas, null, { width, height, devicePixelRatio: dpr });
       const option = {
-        title: { text: '价格历史', left: 'center', top: 10, textStyle: { fontSize: 16 } },
-        tooltip: { trigger: 'axis' },
+        grid: { left: 40, right: 10, top: 20, bottom: 20 },
         xAxis: {
           type: 'category',
           data: xData,
-          axisLabel: { rotate: 30 }
+          axisLabel: { show: false },
+          axisTick: { show: false },
+          axisLine: { show: false }
         },
         yAxis: {
           type: 'value',
-          name: '单价',
           min: 'dataMin',
-          max: 'dataMax'
+          max: 'dataMax',
+          axisLabel: { fontSize: 10 }
         },
         series: [{
           data: yData,
           type: 'line',
           smooth: true,
-          symbol: 'circle'
+          symbol: 'circle',
+          lineStyle: { width: 2 },
+          itemStyle: { color: '#07c160' }
         }]
       };
-      console.log('ECharts option:', option);
+      chart.setOption(option);
+      return chart;
+    });
+  },
+  onCardTap: function(e) {
+    const name = e.currentTarget.dataset.name;
+    const item = this.data.productList.find(i => i.name === name);
+    if (!item) return;
+    this.setData({ showBigChart: true, bigChartData: item }, () => {
+      this.initBigChart(item.allHistory, item.name);
+    });
+  },
+  closeBigChart: function() {
+    this.setData({ showBigChart: false });
+  },
+  noop: function() {},
+  initBigChart: function(historyArr, name) {
+    const comp = this.selectComponent('#bigChart');
+    if (!comp) return;
+    const xData = historyArr.map(item => item.time.slice(0, 10));
+    const yData = historyArr.map(item => parseFloat(item.unitPrice));
+    comp.init((canvas, width, height, dpr) => {
       const chart = echarts.init(canvas, null, { width, height, devicePixelRatio: dpr });
+      const option = {
+        title: { text: name, left: 'center', top: 10, textStyle: { fontSize: 16 } },
+        grid: { left: 40, right: 10, top: 40, bottom: 30 },
+        xAxis: {
+          type: 'category',
+          data: xData,
+          axisLabel: { fontSize: 12 },
+          axisTick: { show: false },
+          axisLine: { show: true }
+        },
+        yAxis: {
+          type: 'value',
+          min: 'dataMin',
+          max: 'dataMax',
+          axisLabel: { fontSize: 12 }
+        },
+        series: [{
+          data: yData,
+          type: 'line',
+          smooth: true,
+          symbol: 'circle',
+          lineStyle: { width: 2 },
+          itemStyle: { color: '#07c160' }
+        }]
+      };
       chart.setOption(option);
       return chart;
     });

@@ -1,10 +1,24 @@
 <view class="page-container">
+  <!-- 搜索栏 -->
   <view class="search-bar">
     <input class="search-input" placeholder="请输入商品名" value="{{searchName}}" bindinput="onInput" />
     <button class="search-btn" bindtap="onSearch">搜索</button>
   </view>
-  <view wx:if="{{chartData.length > 0}}" class="chart-area">
-    <ec-canvas id="priceChart" canvas-id="priceChart" ec="{{ec}}"></ec-canvas>
+  <!-- 卡片区 -->
+  <block wx:for="{{filteredList}}" wx:key="name">
+    <view class="history-card" bindtap="onCardTap" data-name="{{item.name}}">
+      <view class="card-title">{{item.name}}</view>
+      <view class="price-info">
+        <view>历史最低价：<text class="min-price">{{item.minPrice}}</text> <text class="price-time">({{item.minTime}})</text></view>
+        <view>历史最高价：<text class="max-price">{{item.maxPrice}}</text> <text class="price-time">({{item.maxTime}})</text></view>
+      </view>
+    </view>
+  </block>
+  <view wx:if="{{!filteredList.length}}" class="empty-tip">暂无任何价格历史</view>
+  <!-- 大图弹窗 -->
+  <view wx:if="{{showBigChart}}" class="big-chart-mask" bindtap="closeBigChart">
+    <view class="big-chart-area" catchtap="noop">
+      <ec-canvas id="bigChart" canvas-id="bigChart" />
+    </view>
   </view>
-  <view wx:else class="empty-tip">暂无该商品的历史价格</view>
 </view> 
