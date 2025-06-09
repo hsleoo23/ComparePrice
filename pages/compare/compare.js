@@ -283,19 +283,45 @@ Page({
   updatePriceStatus: function() {
     const items = this.data.items;
     const validItems = items.filter(item => item.unitPriceValue !== undefined);
-    
+    if (validItems.length < 2) {
+      items.forEach(item => {
+        item.isLowest = false;
+        item.isHighest = false;
+        item.isSamePrice = false;
+      });
+      this.setData({ items });
+      return;
+    }
+    // 判断是否所有单价都相同
+    const firstPrice = validItems[0].unitPriceValue;
+    const allSame = validItems.every(item => item.unitPriceValue === firstPrice);
+    if (allSame) {
+      items.forEach(item => {
+        if (item.unitPriceValue !== undefined) {
+          item.isSamePrice = true;
+          item.isLowest = false;
+          item.isHighest = false;
+        } else {
+          item.isSamePrice = false;
+        }
+      });
+      this.setData({ items });
+      return;
+    }
+    // 原有逻辑
     if (validItems.length > 0) {
       const prices = validItems.map(item => item.unitPriceValue);
       const minPrice = Math.min(...prices);
       const maxPrice = Math.max(...prices);
-      
       items.forEach(item => {
         if (item.unitPriceValue !== undefined) {
           item.isLowest = item.unitPriceValue === minPrice;
           item.isHighest = item.unitPriceValue === maxPrice;
+          item.isSamePrice = false;
+        } else {
+          item.isSamePrice = false;
         }
       });
-      
       this.setData({ items });
     }
   },

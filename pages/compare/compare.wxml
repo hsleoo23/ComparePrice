@@ -78,6 +78,7 @@
           <view class="cell unitprice-cell">{{item.unitPrice}}</view>
         </view>
         <view class="tag-row">
+          <view wx:if="{{item.isSamePrice}}" class="tag tag-abs same-price-tag">单价相同</view>
           <view wx:if="{{item.isLowest}}" class="tag tag-abs lowest-tag">🌟单价最优</view>
           <view wx:if="{{item.isHighest}}" class="tag tag-abs highest-tag">❗最高单价</view>
         </view>
@@ -91,8 +92,6 @@
     <view class="action-buttons">
       <button bindtap="addItem">添加商品</button>
       <button bindtap="clearItems">清空</button>
-    </view>
-    <view class="save-button">
       <button bindtap="saveRecord">保存比价记录</button>
       <button bindtap="savePriceHistory">保存价格信息</button>
     </view>

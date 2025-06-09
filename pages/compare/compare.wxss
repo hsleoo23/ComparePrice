@@ -116,12 +116,13 @@
   display: flex;
   gap: 20rpx;
   padding: 20rpx;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  justify-content: space-between;
 }
 
 .action-buttons button {
   flex: 1;
-  min-width: 200rpx;
+  min-width: 0;
   margin: 0;
   font-size: 28rpx;
   padding: 16rpx 0;
@@ -129,6 +130,7 @@
   color: #333;
   border: 1px solid #ddd;
   border-radius: 8rpx;
+  text-align: center;
 }
 
 .action-buttons button:active {
@@ -421,9 +423,21 @@
   color: #388e3c;
   /* background: rgba(76, 175, 80, 0.08); */
   border-radius: 0 0 12rpx 12rpx;
+  font-weight: bold;
 }
 .highest-tag {
   color: #d32f2f;
   /* background: rgba(244, 67, 54, 0.08); */
   border-radius: 0 0 12rpx 12rpx;
+  font-weight: bold;
+}
+
+.item-card.same-price {
+  background-color: #fffde7;
+}
+.tag.same-price-tag {
+  color: #ff9800;
+  background: rgba(255, 193, 7, 0.12);
+  border-radius: 0 0 12rpx 12rpx;
+  font-weight: bold;
 }
