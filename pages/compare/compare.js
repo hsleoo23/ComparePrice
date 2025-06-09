@@ -55,6 +55,7 @@ Page({
         error: false,
         isLowest: false,
         isHighest: false,
+        isSamePrice: false,
         nameModified: false,
         priceModified: false,
         specModified: false,
@@ -69,6 +70,22 @@ Page({
         error: false,
         isLowest: false,
         isHighest: false,
+        isSamePrice: false,
+        nameModified: false,
+        priceModified: false,
+        specModified: false,
+        quantityModified: false
+      },
+      {
+        name: '商品3',
+        price: '',
+        spec: '',
+        quantity: 1,
+        unitPrice: '',
+        error: false,
+        isLowest: false,
+        isHighest: false,
+        isSamePrice: false,
         nameModified: false,
         priceModified: false,
         specModified: false,
@@ -412,7 +429,7 @@ Page({
     const validItems = items.filter(item => item.name && !/^商品\d+$/.test(item.name) && item.unitPrice);
     if (validItems.length === 0) {
       wx.showToast({
-        title: '没有可保存的商品',
+        title: '请编辑商品名后保存',
         icon: 'none'
       });
       return;
