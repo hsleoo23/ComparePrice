@@ -165,9 +165,14 @@ Page({
           });
           wx.setStorageSync('priceHistory', priceHistory);
           wx.showToast({ title: '添加成功', icon: 'success' });
-          // 关闭弹窗并刷新页面
-          this.setData({ showBigChart: false });
-          this.onShow();
+          // 刷新大图历史数据和折线图，不关闭弹窗
+          // 重新获取该商品的历史数据
+          const allHistory = priceHistory.filter(h => h.name === item.name).sort((a, b) => new Date(a.time) - new Date(b.time));
+          this.setData({
+            bigChartData: { ...item, allHistory }
+          }, () => {
+            this.initBigChart(allHistory, item.name);
+          });
         }
       }
     });
