@@ -92,7 +92,9 @@ Page({
         quantityModified: false
       }
     ];
-    this.setData({ items: defaultItems });
+    this.setData({ items: defaultItems }, () => {
+      this.sortItems({ currentTarget: { dataset: { field: 'unitPrice' } } }, true);
+    });
   },
   // 添加新商品项
   addItem: function () {
@@ -107,12 +109,18 @@ Page({
       error: false,
       isLowest: false,
       isHighest: false,
+      isSamePrice: false,
       nameModified: false,
       priceModified: false,
       specModified: false,
       quantityModified: false
     });
-    this.setData({ items });
+    this.setData({ items }, () => {
+      // 如果当前有排序字段，保持当前排序方式，否则默认unitPrice升序
+      const field = this.data.sortField ? this.data.sortField : 'unitPrice';
+      const order = this.data.sortOrder ? this.data.sortOrder : 'asc';
+      this.sortItems({ currentTarget: { dataset: { field } } }, !this.data.sortField, order);
+    });
   },
   // 更新商品项信息
   updateItem: function (e) {
@@ -159,24 +167,22 @@ Page({
   calculateUnitPrice: function (index) {
     let items = this.data.items;
     let item = items[index];
-    
     // 重置状态
     item.error = false;
     item.isLowest = false;
     item.isHighest = false;
-
+    item.isSamePrice = false;
     if (item.price && item.spec && item.quantity) {
       const price = parseFloat(item.price);
       const spec = parseFloat(item.spec);
       const quantity = parseInt(item.quantity) || 1;
-
       if (isNaN(price) || isNaN(spec) || isNaN(quantity) || spec === 0 || quantity === 0) {
         item.error = true;
         item.unitPrice = '';
         item.unitPriceValue = undefined;
+        this.setData({ items });
         return;
       }
-
       const unitPriceValue = price / (spec * quantity);
       item.unitPrice = unitPriceValue.toFixed(2);
       item.unitPriceValue = unitPriceValue; // 存储用于排序的数值
@@ -184,9 +190,12 @@ Page({
       item.unitPrice = '';
       item.unitPriceValue = undefined;
     }
-    
     this.setData({ items }, () => {
       this.updatePriceStatus();
+      // 只要有单价，自动排序
+      if (item.unitPriceValue !== undefined) {
+        this.sortItems({ currentTarget: { dataset: { field: this.data.sortField } } }, false);
+      }
     });
   },
   // 清空所有商品项
@@ -343,23 +352,28 @@ Page({
     }
   },
   // 添加排序方法
-  sortItems: function(e) {
-    const field = e.currentTarget.dataset.field;
+  sortItems: function(e, forceAsc, forceOrder) {
+    const field = e && e.currentTarget && e.currentTarget.dataset.field ? e.currentTarget.dataset.field : 'unitPrice';
     let { items, sortField, sortOrder } = this.data;
-    
-    // 如果点击的是当前排序字段，则切换排序方向
-    if (field === sortField) {
+    // 如果有forceOrder参数，直接用，不切换
+    if (forceOrder) {
+      sortField = field;
+      sortOrder = forceOrder;
+    } else if (!forceAsc && field === sortField) {
+      // 如果点击的是当前排序字段，则切换排序方向
       sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
     } else {
       // 如果是新的排序字段，默认升序
       sortField = field;
       sortOrder = 'asc';
     }
-
     // 根据字段类型进行排序
     items.sort((a, b) => {
+      // 只要有一个未算出单价，排在最后
+      if (a.unitPriceValue === undefined && b.unitPriceValue === undefined) return 0;
+      if (a.unitPriceValue === undefined) return 1;
+      if (b.unitPriceValue === undefined) return -1;
       let valueA, valueB;
-      
       switch(field) {
         case 'name':
           valueA = a.name || '';
@@ -384,7 +398,6 @@ Page({
         default:
           return 0;
       }
-
       // 根据排序方向返回比较结果
       if (sortOrder === 'asc') {
         return valueA > valueB ? 1 : -1;
@@ -392,7 +405,6 @@ Page({
         return valueA < valueB ? 1 : -1;
       }
     });
-
     this.setData({ 
       items,
       sortField,
