@@ -18,7 +18,13 @@
   <!-- 大图弹窗 -->
   <view wx:if="{{showBigChart}}" class="big-chart-mask" bindtap="closeBigChart">
     <view class="big-chart-area" catchtap="noop">
+      <view class="big-chart-header">
+        <view class="big-chart-title">{{bigChartData.name}}</view>
+        <button class="add-price-btn" bindtap="onAddCurrentPrice">添加当前价格</button>
+      </view>
+
       <ec-canvas id="bigChart" canvas-id="bigChart" />
+
     </view>
   </view>
 </view> 

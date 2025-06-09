@@ -113,7 +113,6 @@ Page({
     comp.init((canvas, width, height, dpr) => {
       const chart = echarts.init(canvas, null, { width, height, devicePixelRatio: dpr });
       const option = {
-        title: { text: name, left: 'center', top: 10, textStyle: { fontSize: 16 } },
         grid: { left: 40, right: 10, top: 40, bottom: 30 },
         xAxis: {
           type: 'category',
@@ -139,6 +138,38 @@ Page({
       };
       chart.setOption(option);
       return chart;
+    });
+  },
+  onAddCurrentPrice: function(e) {
+    // 阻止冒泡，避免关闭弹窗
+    if (e) e.stopPropagation && e.stopPropagation();
+    const item = this.data.bigChartData;
+    if (!item) return;
+    wx.showModal({
+      title: '添加当前价格',
+      editable: true,
+      placeholderText: '请输入当前价格',
+      success: (res) => {
+        if (res.confirm && res.content) {
+          const price = parseFloat(res.content);
+          if (isNaN(price) || price <= 0) {
+            wx.showToast({ title: '请输入有效的价格', icon: 'none' });
+            return;
+          }
+          const now = new Date().toISOString();
+          const priceHistory = wx.getStorageSync('priceHistory') || [];
+          priceHistory.push({
+            name: item.name,
+            unitPrice: price.toFixed(2),
+            time: now
+          });
+          wx.setStorageSync('priceHistory', priceHistory);
+          wx.showToast({ title: '添加成功', icon: 'success' });
+          // 关闭弹窗并刷新页面
+          this.setData({ showBigChart: false });
+          this.onShow();
+        }
+      }
     });
   }
 }); 
